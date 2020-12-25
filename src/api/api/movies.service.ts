@@ -99,6 +99,7 @@ export namespace MoviesGetMoviesPage {
     export interface PartialParamMap {
       limit?: number;
       offset?: number;
+      asc?: boolean;
     }
 
     /**
@@ -106,7 +107,8 @@ export namespace MoviesGetMoviesPage {
      */
     export enum Parameters {
       limit = 'limit',
-      offset = 'offset'
+      offset = 'offset',
+      asc = 'asc'
     }
 
     /**
@@ -117,6 +119,8 @@ export namespace MoviesGetMoviesPage {
       limit: [
       ],
       offset: [
+      ],
+      asc: [
       ],
     };
 }
@@ -496,6 +500,7 @@ export class MoviesService {
     return this.moviesGetMoviesPage(
       map.limit,
       map.offset,
+      map.asc,
       observe,
       reportProgress,
       cancelPreviousRequest
@@ -508,14 +513,15 @@ export class MoviesService {
      * 
      * @param limit 
      * @param offset 
+     * @param asc 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param cancelPreviousRequest set whether or not the previous request for the same operation should be cancelled if it is still running.
      */
-    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<Array<Movie>>;
-    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpResponse<Array<Movie>>>;
-    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpEvent<Array<Movie>>>;
-    public moviesGetMoviesPage(limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false, cancelPreviousRequest: boolean = true): Observable<any> {
+    public moviesGetMoviesPage(limit?: number, offset?: number, asc?: boolean, observe?: 'body', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<Array<Movie>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, asc?: boolean, observe?: 'response', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpResponse<Array<Movie>>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, asc?: boolean, observe?: 'events', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpEvent<Array<Movie>>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, asc?: boolean, observe: any = 'body', reportProgress: boolean = false, cancelPreviousRequest: boolean = true): Observable<any> {
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
         if (limit !== undefined && limit !== null) {
@@ -523,6 +529,9 @@ export class MoviesService {
         }
         if (offset !== undefined && offset !== null) {
             queryParameters = queryParameters.set('offset', <any>offset);
+        }
+        if (asc !== undefined && asc !== null) {
+            queryParameters = queryParameters.set('asc', <any>asc);
         }
 
         let headers = this.defaultHeaders;
