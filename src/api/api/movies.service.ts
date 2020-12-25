@@ -90,26 +90,34 @@ export namespace MoviesGetMovie {
 }
 
 /**
- * Namespace for moviesGetMovies.
+ * Namespace for moviesGetMoviesPage.
  */
-export namespace MoviesGetMovies {
+export namespace MoviesGetMoviesPage {
     /**
-     * Parameter map for moviesGetMovies.
+     * Parameter map for moviesGetMoviesPage.
      */
     export interface PartialParamMap {
+      limit?: number;
+      offset?: number;
     }
 
     /**
-     * Enumeration of all parameters for moviesGetMovies.
+     * Enumeration of all parameters for moviesGetMoviesPage.
      */
     export enum Parameters {
+      limit = 'limit',
+      offset = 'offset'
     }
 
     /**
-     * A map of tuples with error name and `ValidatorFn` for each parameter of moviesGetMovies
+     * A map of tuples with error name and `ValidatorFn` for each parameter of moviesGetMoviesPage
      * that does not have an own model.
      */
-    export const ParamValidators: {[K in keyof MoviesGetMovies.PartialParamMap]?: [string, ValidatorFn][]} = {
+    export const ParamValidators: {[K in keyof MoviesGetMoviesPage.PartialParamMap]?: [string, ValidatorFn][]} = {
+      limit: [
+      ],
+      offset: [
+      ],
     };
 }
 
@@ -465,27 +473,29 @@ export class MoviesService {
    * @param reportProgress flag to report request and response progress.
    * @param cancelPreviousRequest set whether or not the previous request for the same operation should be cancelled if it is still running.
    */
-  public moviesGetMoviesByMap(
-    map: MoviesGetMovies.PartialParamMap,
+  public moviesGetMoviesPageByMap(
+    map: MoviesGetMoviesPage.PartialParamMap,
     observe?: 'body',
     reportProgress?: boolean,
     cancelPreviousRequest?: boolean): Observable<Array<Movie>>;
-  public moviesGetMoviesByMap(
-    map: MoviesGetMovies.PartialParamMap,
+  public moviesGetMoviesPageByMap(
+    map: MoviesGetMoviesPage.PartialParamMap,
     observe?: 'response',
     reportProgress?: boolean,
     cancelPreviousRequest?: boolean): Observable<HttpResponse<Array<Movie>>>;
-  public moviesGetMoviesByMap(
-    map: MoviesGetMovies.PartialParamMap,
+  public moviesGetMoviesPageByMap(
+    map: MoviesGetMoviesPage.PartialParamMap,
     observe?: 'events',
     reportProgress?: boolean,
     cancelPreviousRequest?: boolean): Observable<HttpEvent<Array<Movie>>>;
-  public moviesGetMoviesByMap(
-    map: MoviesGetMovies.PartialParamMap,
+  public moviesGetMoviesPageByMap(
+    map: MoviesGetMoviesPage.PartialParamMap,
     observe: any = 'body',
     reportProgress: boolean = false,
     cancelPreviousRequest: boolean = true): Observable<any> {
-    return this.moviesGetMovies(
+    return this.moviesGetMoviesPage(
+      map.limit,
+      map.offset,
       observe,
       reportProgress,
       cancelPreviousRequest
@@ -496,14 +506,24 @@ export class MoviesService {
     /**
      * 
      * 
+     * @param limit 
+     * @param offset 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param cancelPreviousRequest set whether or not the previous request for the same operation should be cancelled if it is still running.
      */
-    public moviesGetMovies(observe?: 'body', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<Array<Movie>>;
-    public moviesGetMovies(observe?: 'response', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpResponse<Array<Movie>>>;
-    public moviesGetMovies(observe?: 'events', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpEvent<Array<Movie>>>;
-    public moviesGetMovies(observe: any = 'body', reportProgress: boolean = false, cancelPreviousRequest: boolean = true): Observable<any> {
+    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'body', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<Array<Movie>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'response', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpResponse<Array<Movie>>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, observe?: 'events', reportProgress?: boolean, cancelPreviousRequest?: boolean): Observable<HttpEvent<Array<Movie>>>;
+    public moviesGetMoviesPage(limit?: number, offset?: number, observe: any = 'body', reportProgress: boolean = false, cancelPreviousRequest: boolean = true): Observable<any> {
+
+        let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
+        if (limit !== undefined && limit !== null) {
+            queryParameters = queryParameters.set('limit', <any>limit);
+        }
+        if (offset !== undefined && offset !== null) {
+            queryParameters = queryParameters.set('offset', <any>offset);
+        }
 
         let headers = this.defaultHeaders;
 
@@ -524,6 +544,7 @@ export class MoviesService {
 
         let handle = this.httpClient.get<Array<Movie>>(`${this.configuration.basePath}/api/Movies`,
             {
+                params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
                 observe: observe,
@@ -532,17 +553,17 @@ export class MoviesService {
         );
 
         if (cancelPreviousRequest) {
-            if (this.cancelMap['Movies_GetMovies']) {
-                this.cancelMap['Movies_GetMovies'].next();
+            if (this.cancelMap['Movies_GetMoviesPage']) {
+                this.cancelMap['Movies_GetMoviesPage'].next();
             }
-            this.cancelMap['Movies_GetMovies'] = 'get'.toUpperCase() === 'GET' ? new Subject<any>() : null;
-            if(this.cancelMap['Movies_GetMovies']) {
-                handle = handle.pipe(takeUntil(this.cancelMap['Movies_GetMovies']));
+            this.cancelMap['Movies_GetMoviesPage'] = 'get'.toUpperCase() === 'GET' ? new Subject<any>() : null;
+            if(this.cancelMap['Movies_GetMoviesPage']) {
+                handle = handle.pipe(takeUntil(this.cancelMap['Movies_GetMoviesPage']));
             }
         }
 
         if (typeof this.configuration.beforeHandler === 'function') {
-          this.configuration.beforeHandler('Movies_GetMovies', 'get'.toUpperCase());
+          this.configuration.beforeHandler('Movies_GetMoviesPage', 'get'.toUpperCase());
         }
         let afterSubscription: Subscription;
         const afterHandler = (result: any = null) => {
@@ -550,13 +571,13 @@ export class MoviesService {
             afterSubscription.unsubscribe();
           }
           // stop cancellation to prevent calling afterHandler on next service call
-          if (cancelPreviousRequest && this.cancelMap['Movies_GetMovies']) {
-            this.cancelMap['Movies_GetMovies'].complete();
-            delete this.cancelMap['Movies_GetMovies'];
+          if (cancelPreviousRequest && this.cancelMap['Movies_GetMoviesPage']) {
+            this.cancelMap['Movies_GetMoviesPage'].complete();
+            delete this.cancelMap['Movies_GetMoviesPage'];
           }
           if (typeof this.configuration.afterHandler === 'function') {
             this.configuration.afterHandler(
-              'Movies_GetMovies',
+              'Movies_GetMoviesPage',
               'get'.toUpperCase(),
               result ? result : new Error('CANCELLED')
             );
@@ -570,7 +591,7 @@ export class MoviesService {
         );
 
         if (typeof this.configuration.errorHandler === 'function') {
-          return handle.pipe(catchError(err => this.configuration.errorHandler(err, 'Movies_GetMovies')));
+          return handle.pipe(catchError(err => this.configuration.errorHandler(err, 'Movies_GetMoviesPage')));
         }
         return handle;
     }
@@ -851,7 +872,7 @@ export namespace MoviesService {
   export enum Operations {
     Movies_DeleteMovie = 'Movies_DeleteMovie',
     Movies_GetMovie = 'Movies_GetMovie',
-    Movies_GetMovies = 'Movies_GetMovies',
+    Movies_GetMoviesPage = 'Movies_GetMoviesPage',
     Movies_PostMovie = 'Movies_PostMovie',
     Movies_PutMovie = 'Movies_PutMovie'
   }
