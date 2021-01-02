@@ -2,7 +2,9 @@ import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
-import { MovieListDataSource, MovieListItem } from './movie-list-datasource';
+import { MovieListDataSource } from './movie-list-datasource';
+import { Movie } from '../../api/model/movie';
+import { MoviesService } from 'src/api/api/api';
 
 @Component({
   selector: 'moviereco-movie-list',
@@ -12,11 +14,11 @@ import { MovieListDataSource, MovieListItem } from './movie-list-datasource';
 export class MovieListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatTable) table: MatTable<MovieListItem>;
+  @ViewChild(MatTable) table: MatTable<Movie>;
   dataSource: MovieListDataSource;
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['movieId', 'title'];
 
   ngOnInit() {
     this.dataSource = new MovieListDataSource();
