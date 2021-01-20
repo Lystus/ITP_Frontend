@@ -27,16 +27,15 @@ export class MovieState {
     }
 
     @Action(GetMovies)
-    getMovies({setState}: StateContext<MovieState>, payload: GetMovies){
+    getMovies({patchState}: StateContext<MovieStateModel>, payload: GetMovies){
         this.movieApi.moviesGetMoviesPage(
             payload.limit, 
             payload.offset,
             payload.asc).subscribe((data) => {
                 console.log(data);
                 
-                setState({
-                    movies: data,
-                    currentMovie: null,
+                patchState({
+                    movies: data
                   });
             });
     }

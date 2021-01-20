@@ -4,7 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTable } from '@angular/material/table';
 import { MovieListDataSource } from './movie-list-datasource';
 import { Movie } from '../../api/model/movie';
-import { MoviesService } from 'src/api/api/api';
+import { Store } from '@ngxs/store';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'moviereco-movie-list',
@@ -16,12 +17,15 @@ export class MovieListComponent implements AfterViewInit, OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<Movie>;
   dataSource: MovieListDataSource;
+  dataSourceLength: Observable<number> = of(300);
+
+  constructor(private store: Store) {}
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
   displayedColumns = ['movieId', 'title'];
 
   ngOnInit() {
-    this.dataSource = new MovieListDataSource();
+    this.dataSource = new MovieListDataSource(this.store);
   }
 
   ngAfterViewInit() {
