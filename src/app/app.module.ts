@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
+import { MatIconModule } from '@angular/material/icon';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
@@ -13,17 +13,22 @@ import { MovieState } from './store/movies.state';
 import { ApiModule } from 'src/api';
 import { HttpClientModule } from '@angular/common/http';
 import { TestingTableComponent } from './testing-table/testing-table.component';
+import { DetailviewComponent } from './detailview/detailview.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
     AppComponent,
     MovieListComponent,
     HomeComponent,
-    TestingTableComponent
+    TestingTableComponent,
+    DetailviewComponent,
   ],
   imports: [
     NgxsModule.forRoot([MovieState], {
-      developmentMode: true
+      developmentMode: true,
     }),
     HttpClientModule,
     ApiModule,
@@ -31,9 +36,13 @@ import { TestingTableComponent } from './testing-table/testing-table.component';
     BrowserAnimationsModule,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule
+    MatSortModule,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatSidenavModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
