@@ -15,8 +15,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { TestingTableComponent } from './testing-table/testing-table.component';
 import { DetailviewComponent } from './detailview/detailview.component';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule } from '@angular/material/grid-list';
+import {
+  MatFormField,
+  MatFormFieldModule,
+  MatLabel,
+} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { HeaderComponent } from './header/header.component';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -25,6 +36,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     HomeComponent,
     TestingTableComponent,
     DetailviewComponent,
+    HeaderComponent,
   ],
   imports: [
     NgxsModule.forRoot([MovieState], {
@@ -41,6 +53,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatButtonModule,
     MatToolbarModule,
     MatSidenavModule,
+    MatCardModule,
+    MatGridListModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    LayoutModule,
+    MatListModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

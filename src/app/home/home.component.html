@@ -1,1 +1,23 @@
-<p>home works!</p>
+<mat-sidenav-container>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <a mat-button routerLink="/lecture/list">
+        <mat-icon style="margin-right: 6px">movie</mat-icon>
+        <span>Movie Recommender</span>
+      </a>
+
+      <div class="flex-spacer"></div>
+
+      <a mat-button>Login</a>
+      <a mat-button>Sign Up</a>
+    </mat-toolbar>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+<div class="container">
+  <mat-grid-list cols="1">
+    <mat-grid-tile>
+      <moviereco-movie-list *ngIf="viewedPanel == 0"></moviereco-movie-list>
+      <moviereco-detailview *ngIf="viewedPanel == 1"></moviereco-detailview>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
